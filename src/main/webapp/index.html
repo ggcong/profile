@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="statelessApp">
+<head lang="en">
+	<title>Stateless Authentication Example</title>
+	<script src="resources/js/angular.js" type="application/javascript"></script>	
+	<script src="resources/js/angular-cookies.js" type="application/javascript"></script>
+	<script src="resources/js/controllers.js" type="application/javascript"></script>
+</head>
+
+<script>
+    function getCookieValue(a) {
+        var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
+        return b ? b.pop() : '';
+    }
+	console.log("index.html");
+    var authToken = getCookieValue('AUTH-TOKEN');
+    if(authToken){
+    	console.log(authToken);
+    	window.location.href = "http://localhost:4200/profile?auth=" + authToken;
+	}
+</script>
+
+<body ng-controller="AuthCtrl" ng-init="init()" style="padding: 10% 20%">
+	<div ng-hide="authenticated">
+		<a href="/profile/auth/facebook">Login with Facebook</a><br/>
+		<a href="/profile/auth/orcid?scope=/authenticate">Login with Orcid</a><br/>
+		<a href="/profile/auth/github">Login with Github</a><br/>
+		<a href="/profile/auth/twitter">Login with Twitter</a>
+	</div>
+	<div ng-show="authenticated">
+		Logged in as {{username}} <button ng-click="logout()">Logout</button><br><br>
+		Token content: <pre>{{token | json}}</pre>
+	</div>
+	<div ng-show="authenticated">
+		<button ng-click="getSocialDetails()">Get Facebook Details</button>
+		<pre>{{socialDetails | json}}</pre>
+	</div>
+</body>
+</html>
